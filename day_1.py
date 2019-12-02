@@ -100,6 +100,19 @@ DAY_1_INPUT = [
     124185,
     105008]
 
+TEST_INPUTS = [
+    ([14], 2),
+    ([1969], 966),
+]
+
+
+def sum_fuel(mass):
+    subtotal = int(mass / 3) - 2
+    if subtotal <= 0:
+        return 0
+    else:
+        return (subtotal + sum_fuel(subtotal))
+
 
 def rocket_equation(puzzle_input):
     total = 0
@@ -109,4 +122,19 @@ def rocket_equation(puzzle_input):
 
     return total
 
+
+def rocket_equation_part2(puzzle_input):
+    total = 0
+    for n in puzzle_input:
+        subtotal = sum_fuel(n)
+        total += subtotal
+
+    return total
+
+
+for (test_in, test_out) in TEST_INPUTS:
+    output = rocket_equation_part2(test_in)
+    assert output == test_out
+
 print(rocket_equation(DAY_1_INPUT))
+print(rocket_equation_part2(DAY_1_INPUT))
