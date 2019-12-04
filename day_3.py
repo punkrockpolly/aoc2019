@@ -9,9 +9,19 @@ TEST_INPUTS = [
     (('R98,U47,R26,D63,R33,U87,L62,D20,R33,U53,R51', 'U98,R91,D20,R16,D67,R40,U7,R15,U6,R7'), 135),
 ]
 
+TEST_INPUTS_PART_2 = [
+    (('R8,U5,L5,D3', 'U7,R6,D4,L4'), 30),
+    (('R75,D30,R83,U83,L12,D49,R71,U7,L72', 'U62,R66,U55,R34,D71,R55,D58,R83'), 610),
+    (('R98,U47,R26,D63,R33,U87,L62,D20,R33,U53,R51', 'U98,R91,D20,R16,D67,R40,U7,R15,U6,R7'), 410),
+]
+
 
 def intersection(lst1, lst2):
     return list(set(lst1) & set(lst2))
+
+
+def intersection_part_2(path_a, path_b):
+    return list(set(path_a.values()) & set(path_b.values()))
 
 
 def make_moves(wire):
@@ -35,14 +45,54 @@ def make_moves(wire):
                 path.append((current_x, current_y))
 
         elif direction == 'R':
-            for y in range(moves):
+            for x in range(moves):
                 current_x += 1
                 path.append((current_x, current_y))
 
         elif direction == 'L':
-            for y in range(moves):
+            for x in range(moves):
                 current_x -= 1
                 path.append((current_x, current_y))
+        else:
+            print('ERROR')
+
+    return path
+
+
+def make_moves_part_2(wire):
+    current_x = 0
+    current_y = 0
+    total_steps = 0
+    path = {}
+    path[total_steps] = (current_x, current_y)
+
+    for step in wire.split(','):
+        direction = step[0]
+        moves = int(step[1:])
+
+        if direction == 'U':
+            for y in range(moves):
+                current_y += 1
+                total_steps += 1
+                path[total_steps] = (current_x, current_y)
+
+        elif direction == 'D':
+            for y in range(moves):
+                current_y -= 1
+                total_steps += 1
+                path[total_steps] = (current_x, current_y)
+
+        elif direction == 'R':
+            for x in range(moves):
+                current_x += 1
+                total_steps += 1
+                path[total_steps] = (current_x, current_y)
+
+        elif direction == 'L':
+            for x in range(moves):
+                current_x -= 1
+                total_steps += 1
+                path[total_steps] = (current_x, current_y)
         else:
             print('ERROR')
 
@@ -61,7 +111,42 @@ def crossed_wires(puzzle_input):
     return distances[1]
 
 
+def crossed_wires_part_2(puzzle_input):
+    (wire_a, wire_b) = puzzle_input
+    distance_matches = {}
+
+    path_a = make_moves_part_2(wire_a)
+    path_b = make_moves_part_2(wire_b)
+    matches = intersection_part_2(path_a, path_b)
+
+    for match in matches:
+        for steps_a, position_a in path_a.items():
+            if position_a == match:
+                distance_matches[position_a] = [steps_a]
+                break
+        for steps_b, position_b in path_b.items():
+            if position_b == match:
+                distance_matches[position_b].append(steps_b)
+                break
+
+    del distance_matches[(0, 0)]
+    key, steps = distance_matches.popitem()
+    shortest_distance = sum(steps)
+
+    for position, steps in distance_matches.items():
+        total_steps = sum(steps)
+        if total_steps < shortest_distance:
+            shortest_distance = total_steps
+
+    return shortest_distance
+
+
 for (test_in, test_out) in TEST_INPUTS:
     assert crossed_wires(test_in) == test_out
 
 print(crossed_wires(DAY_3_INPUT))
+
+for (test_in, test_out) in TEST_INPUTS_PART_2:
+    assert crossed_wires_part_2(test_in) == test_out
+
+print(crossed_wires_part_2(DAY_3_INPUT))
