@@ -37,4 +37,15 @@ def gravity_assist(puzzle_input):
 for (test_in, test_out) in TEST_INPUTS:
     assert gravity_assist(test_in) == test_out
 
-print(gravity_assist(DAY_2_INPUT)[0])
+
+def part_two():
+    for noun in range(0, 100):
+        for verb in range(0, 100):
+            adjusted_input = DAY_2_INPUT.copy()
+            adjusted_input[1] = noun
+            adjusted_input[2] = verb
+
+            if gravity_assist(adjusted_input)[0] == 19690720:
+                return 100 * noun + verb
+
+print(part_two())
