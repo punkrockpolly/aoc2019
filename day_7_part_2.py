@@ -18,9 +18,9 @@ def interpret_opcode(opcode):
     return (instruction, mode_1, mode_2)
 
 
-def intnode(puzzle_data, phase_setting, input_signal, n=0, prev_output=0):
+def intnode(puzzle_data, phase_setting, input_signal, n=0):
     length = len(puzzle_data)
-    output = prev_output
+    output = 0
     # print(n, puzzle_data)
 
     while n < length:
@@ -100,7 +100,6 @@ def intnode(puzzle_data, phase_setting, input_signal, n=0, prev_output=0):
 
 def max_thruster(puzzle_data):
     current_max = 0
-    loop = 0
     perms = permutations("56789")
     for p in perms:
         data = [puzzle_data.copy(), puzzle_data.copy(), puzzle_data.copy(), puzzle_data.copy(), puzzle_data.copy()]
@@ -109,7 +108,6 @@ def max_thruster(puzzle_data):
         output = 0
         halt = False
         while not halt:
-            loop += 1
             for i, d in enumerate(data):
                 n[i], d, output, halt = intnode(d, int(p[i]), output, n[i])
                 if not halt:
