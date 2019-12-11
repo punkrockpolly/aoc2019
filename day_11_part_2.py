@@ -126,6 +126,9 @@ def intnode(puzzle_data, instance_input, n=0, relative_base=0):
 
 
 grid = defaultdict(int)
+width = 200
+height = 200
+grid_paint = [[' '] * width for _ in range(height)]
 
 
 def hull_robot(grid, puzzle_data):
@@ -164,5 +167,8 @@ def hull_robot(grid, puzzle_data):
 
 
 painted_output = hull_robot(grid, DAY_11_INPUT)
-painted_output = sorted(painted_output)
 print(painted_output)
+for ((y, x), color) in painted_output.items():
+    grid_paint[x][y] = '#' if color == 1 else ' '
+
+print(grid_paint)
