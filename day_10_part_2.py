@@ -1,5 +1,5 @@
 from collections import defaultdict
-from math import atan2, degrees, pi
+from math import atan2, degrees
 
 
 DAY_10_INPUT = """###..#.##.####.##..###.#.#..
@@ -65,7 +65,6 @@ def find_degrees(point1, point2):
     x2, y2 = point2
     y = y2 - y1
     x = x2 - x1
-    # x = x if x >= 0 else 2 * pi + x
 
     degree = degrees(atan2(y, x)) + 90
     degree = (degree + 360) % 360
