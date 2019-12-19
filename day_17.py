@@ -135,16 +135,9 @@ def parse_input(puzzle_data):
 
     parsed_string = ''
 
-    for i in range(0, len(output_string) - 1, 2):
-        char = output_string[i:i + 2]
-        if char == '35':
-            parsed_string += '#'
-        elif char == '46':
-            parsed_string += '.'
-        elif char == '10':
-            parsed_string += '\n'
-        else:
-            parsed_string += '?'
+    for i in range(0, len(output_string) - 2, 2):
+        char = int(output_string[i:i + 2])
+        parsed_string += chr(char)
 
     return parsed_string
 
