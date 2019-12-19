@@ -145,11 +145,12 @@ def repair_droid(puzzle_data):
             path[new_xy] = path[(x, y)] + [new_xy]
             if output == 2:
                 data['oxygen'] = new_xy
+                saved_state = (pd, n, relative_base)
             if output == 0:
                 continue
             q.append(new_xy)
 
-    new_data = {data['oxygen']: (puzzle_data.copy(), 0, 0)}
+    new_data = {data['oxygen']: saved_state}
     path = {data['oxygen']: []}
     oxygen_q = deque([data['oxygen']])
     longest_path = data['oxygen']
@@ -171,7 +172,7 @@ def repair_droid(puzzle_data):
                 continue
             oxygen_q.append(new_xy)
 
-    return len(path[longest_path])
+    return len(path[longest_path]) - 1
 
 
 print(repair_droid(DAY_15_INPUT))
