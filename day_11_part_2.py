@@ -32,7 +32,7 @@ def assign_value(mode, input_param, state, n, relative_base, value):
         state[input_param + relative_base] = value
 
 
-def intnode(puzzle_data, instance_input, n=0, relative_base=0):
+def intcode(puzzle_data, instance_input, n=0, relative_base=0):
     puzzle_data.extend([0 for _ in range(5000)])
     output = []
 
@@ -140,7 +140,7 @@ def hull_robot(grid, puzzle_data):
     grid[position] = 1
 
     while not halt:
-        output, halt, n, relative_base = intnode(puzzle_data, grid[position], n, relative_base)
+        output, halt, n, relative_base = intcode(puzzle_data, grid[position], n, relative_base)
         color, direction = output
         grid[position] = color
 

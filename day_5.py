@@ -19,7 +19,7 @@ def interpret_opcode(opcode):
     return (instruction, mode_1, mode_2, mode_3)
 
 
-def intnode(puzzle_data, user_input):
+def intcode(puzzle_data, user_input):
     length = len(puzzle_data)
     n = 0
 
@@ -80,8 +80,8 @@ def intnode(puzzle_data, user_input):
 
 for (test_in, test_out, user_input) in TEST_INPUTS:
     # print(test_in)
-    output = intnode(test_in, user_input)
+    output = intcode(test_in, user_input)
     # print(output)
     assert output == test_out
 
-intnode(DAY_5_INPUT, 1)
+intcode(DAY_5_INPUT, 1)

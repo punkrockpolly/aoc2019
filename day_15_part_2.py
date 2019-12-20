@@ -32,7 +32,7 @@ def assign_value(mode, input_param, state, n, relative_base, value):
         state[input_param + relative_base] = value
 
 
-def intnode(puzzle_data, n=0, relative_base=0, instance_input=0):
+def intcode(puzzle_data, n=0, relative_base=0, instance_input=0):
     puzzle_data.extend([0 for _ in range(100)])
     output = []
     halt = False
@@ -140,7 +140,7 @@ def repair_droid(puzzle_data):
                 continue
             (data_out, n, relative_base) = data[(x, y)]
             pd = data_out.copy()
-            output, halt, n, relative_base = intnode(pd, n, relative_base, direction)
+            output, halt, n, relative_base = intcode(pd, n, relative_base, direction)
             data[new_xy] = (pd, n, relative_base)
             path[new_xy] = path[(x, y)] + [new_xy]
             if output == 2:
@@ -163,7 +163,7 @@ def repair_droid(puzzle_data):
                 continue
             (data_out, n, relative_base) = new_data[(x, y)]
             pd = data_out.copy()
-            output, halt, n, relative_base = intnode(pd, n, relative_base, direction)
+            output, halt, n, relative_base = intcode(pd, n, relative_base, direction)
             new_data[new_xy] = (pd, n, relative_base)
             path[new_xy] = path[(x, y)] + [new_xy]
             if len(path[new_xy]) > len(path[longest_path]):

@@ -18,7 +18,7 @@ def interpret_opcode(opcode):
     return (instruction, mode_1, mode_2)
 
 
-def intnode(puzzle_data, phase_setting, input_signal, n=0):
+def intcode(puzzle_data, phase_setting, input_signal, n=0):
     length = len(puzzle_data)
     output = 0
     # print(n, puzzle_data)
@@ -109,7 +109,7 @@ def max_thruster(puzzle_data):
         halt = False
         while not halt:
             for i, d in enumerate(data):
-                n[i], d, output, halt = intnode(d, int(p[i]), output, n[i])
+                n[i], d, output, halt = intcode(d, int(p[i]), output, n[i])
                 if not halt:
                     outputs[i] = output
         if outputs[4] > current_max:

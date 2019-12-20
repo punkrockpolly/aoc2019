@@ -35,7 +35,7 @@ def assign_value(mode, input_param, state, n, relative_base, value):
         state[input_param + relative_base] = value
 
 
-def intnode(puzzle_data, user_input):
+def intcode(puzzle_data, user_input):
     relative_base = 0
     n = 0
     puzzle_data.extend([0 for _ in range(5000)])
@@ -127,8 +127,8 @@ def intnode(puzzle_data, user_input):
 
 for (test_in, test_out, user_input) in TEST_INPUTS:
     print(test_in)
-    output = intnode(test_in, user_input)
+    output = intcode(test_in, user_input)
     print("output: ", output)
     assert output == test_out
 
-print(intnode(DAY_9_INPUT, 2))
+print(intcode(DAY_9_INPUT, 2))

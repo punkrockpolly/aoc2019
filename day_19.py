@@ -29,7 +29,7 @@ def assign_value(mode, input_param, state, n, relative_base, value):
         state[input_param + relative_base] = value
 
 
-def intnode(puzzle_data, n=0, relative_base=0):
+def intcode(puzzle_data, n=0, relative_base=0):
     puzzle_data.extend([0 for _ in range(5000)])
 
     while True:
@@ -128,7 +128,7 @@ def tractor_beam(puzzle_data):
 
     for y in range(height):
         for x in range(width):
-            computer = intnode(puzzle_data.copy())
+            computer = intcode(puzzle_data.copy())
             computer.send(None)
             computer.send(x)
             grid[y][x] = computer.send(y)

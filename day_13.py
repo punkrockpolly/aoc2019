@@ -29,7 +29,7 @@ def assign_value(mode, input_param, state, n, relative_base, value):
         state[input_param + relative_base] = value
 
 
-def intnode(puzzle_data, instance_input=0, n=0, relative_base=0):
+def intcode(puzzle_data, instance_input=0, n=0, relative_base=0):
     puzzle_data.extend([0 for _ in range(5000)])
     output = []
 
@@ -129,7 +129,7 @@ def game(puzzle_data):
     screen = {}
 
     while not halt:
-        output, halt, n, relative_base = intnode(puzzle_data, 0, n, relative_base)
+        output, halt, n, relative_base = intcode(puzzle_data, 0, n, relative_base)
         if not halt:
             x, y, tile = output
             screen[(x, y)] = tile

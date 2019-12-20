@@ -29,7 +29,7 @@ def assign_value(mode, input_param, state, n, relative_base, value):
         state[input_param + relative_base] = value
 
 
-def intnode(puzzle_data, n=0, relative_base=0, instance_input=0):
+def intcode(puzzle_data, n=0, relative_base=0, instance_input=0):
     puzzle_data.extend([0 for _ in range(5000)])
     output = []
     halt = False
@@ -130,7 +130,7 @@ def parse_input(puzzle_data):
     output_string = ''
 
     while not halt:
-        output, halt, n, relative_base = intnode(puzzle_data, n, relative_base)
+        output, halt, n, relative_base = intcode(puzzle_data, n, relative_base)
         output_string += str(output)
 
     parsed_string = ''
