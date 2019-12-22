@@ -22,7 +22,7 @@ def fft(puzzle_input, phases):
             repeating_pattern = []
             for ipattern in range(4):  # repeat base pattern
                 repeating_pattern += [base_pattern[ipattern]] * (i + 1)
-            if len(repeating_pattern) < len(puzzle_array):  # scale size of repeating pattern
+            if len(repeating_pattern) < len(puzzle_array) + 1:  # scale size of repeating pattern
                 scale = len(puzzle_array) // len(repeating_pattern) + 1
                 repeating_pattern = repeating_pattern * scale
             repeating_pattern = repeating_pattern[1:len(puzzle_array) + 1]  # skip first value
@@ -38,6 +38,6 @@ for (test_in, phases, test_out) in TEST_INPUTS:
     print(test_in)
     output = fft(test_in, phases)
     print("output: ", output)
-    assert output == test_out
+    assert numpy.array_equal(output, test_out)
 
 print(fft(DAY_16_INPUT, 100))
