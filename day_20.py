@@ -194,32 +194,32 @@ def parse_input(puzzle_input, donut_left=37, donut_right=96, donut_top=37, donut
                 elif y == len(donut) - 1:
                     portals[(x, len(donut) - 2)] += char
                 # left edge
-                elif x == 0:
+                if x == 0:
                     portals[(1, y)] = char
                 elif x == 1:
                     portals[(1, y)] += char
                 # right edge
-                elif x == len(line) - 2:
+                if x == len(line) - 2:
                     portals[(len(line) - 2, y)] = char
                 elif x == len(line) - 1:
                     portals[(len(line) - 2, y)] += char
                 # inner left edge
-                elif x == donut_left:
+                if x == donut_left:
                     portals[(donut_left, y)] = char
                 elif x == donut_left + 1:
                     portals[(donut_left, y)] += char
                 # inner right edge
-                elif x == donut_right:
+                if x == donut_right:
                     portals[(donut_right + 1, y)] = char
                 elif x == donut_right + 1:
                     portals[(donut_right + 1, y)] += char
                 # inner top edge
-                elif y == donut_top:
+                if y == donut_top:
                     portals[(x, donut_top)] = char
                 elif y == donut_top + 1:
                     portals[(x, donut_top)] += char
                 # inner bottom edge
-                elif y == donut_bottom:
+                if y == donut_bottom:
                     portals[(x, donut_bottom + 1)] = char
                 elif y == donut_bottom + 1:
                     portals[(x, donut_bottom + 1)] += char
