@@ -44,7 +44,7 @@ def intcode(puzzle_data, n=0, relative_base=0):
             break
 
         if len(output) == 3:
-            instance_input = yield output  # OUTPUT
+            yield output  # OUTPUT
 
         input_one = puzzle_data[n + 1]
 
@@ -148,13 +148,22 @@ def intcode_network(puzzle_data):
 
         for receive_addr, computer in network.items():
             if not input_q[receive_addr]:  # if no packet is waiting, input instructions should receive -1
-                input_q[receive_addr].append(-1)
-
-            packet = input_q[receive_addr].popleft()
-            output = computer.send(packet)
+                output = computer.send(-1)
+                output2 = None
+            else:
+                output = computer.send(input_q[receive_addr].popleft())  # send x
+                output2 = computer.send(input_q[receive_addr].popleft())  # send y
             if output:
+                print("output1: ", i, output)
                 send_addr, x, y = output
-                print(i, output)
+                if send_addr == 255:
+                    return y
+                # add both x and y to the queue
+                output_q[send_addr].append(x)
+                output_q[send_addr].append(y)
+            if output2:
+                print("output2: ", i, output2)
+                send_addr, x, y = output2
                 if send_addr == 255:
                     return y
                 # add both x and y to the queue
