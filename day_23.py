@@ -34,7 +34,6 @@ def assign_value(mode, input_param, state, n, relative_base, value):
 
 def intcode(puzzle_data, n=0, relative_base=0):
     puzzle_data.extend([0 for _ in range(500)])
-    output = []
 
     while True:
         (opcode, mode_1, mode_2, mode_3) = interpret_opcode(puzzle_data[n])
@@ -42,9 +41,6 @@ def intcode(puzzle_data, n=0, relative_base=0):
         if opcode == 99:
             print('HALT opcode: 99')
             break
-
-        if len(output) == 3:
-            yield output  # OUTPUT
 
         input_one = puzzle_data[n + 1]
 
@@ -70,11 +66,12 @@ def intcode(puzzle_data, n=0, relative_base=0):
             n += 2
         elif opcode == 4:
             if mode_1 == 0:
-                output.append(puzzle_data[input_one])
+                output = puzzle_data[input_one]
             elif mode_1 == 1:
-                output.append(input_one)
+                output = input_one
             elif mode_1 == 2:
-                output.append(puzzle_data[input_one + relative_base])
+                output = puzzle_data[input_one + relative_base]
+            yield output  # OUTPUT
             n += 2
         elif opcode == 5:
             input_two = puzzle_data[n + 2]
@@ -138,37 +135,20 @@ def intcode_network(puzzle_data):
         network[network_address] = computer
 
     # network loop
-    input_q = defaultdict(deque)
-    output_q = defaultdict(deque)
-    i = 0
+    msg_q = defaultdict(deque)
     while True:
-        i += 1
-        for addr in output_q:  # move output queue to input queue
-            input_q[addr].extend(output_q[addr])
-
-        for receive_addr, computer in network.items():
-            if not input_q[receive_addr]:  # if no packet is waiting, input instructions should receive -1
-                output = computer.send(-1)
-                output2 = None
-            else:
-                output = computer.send(input_q[receive_addr].popleft())  # send x
-                output2 = computer.send(input_q[receive_addr].popleft())  # send y
-            if output:
-                print("output1: ", i, output)
-                send_addr, x, y = output
-                if send_addr == 255:
+        for addr, computer in network.items():
+            # if no packet is waiting, input instructions should receive -1
+            msg = msg_q[addr].popleft() if msg_q[addr] else -1
+            resp = computer.send(msg)
+            if resp:
+                x = next(computer)
+                y = next(computer)
+                if resp == 255:
                     return y
                 # add both x and y to the queue
-                output_q[send_addr].append(x)
-                output_q[send_addr].append(y)
-            if output2:
-                print("output2: ", i, output2)
-                send_addr, x, y = output2
-                if send_addr == 255:
-                    return y
-                # add both x and y to the queue
-                output_q[send_addr].append(x)
-                output_q[send_addr].append(y)
+                msg_q[resp].append(x)
+                msg_q[resp].append(y)
 
 
 print(intcode_network(DAY_23_INPUT))
