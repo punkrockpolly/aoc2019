@@ -198,9 +198,10 @@ def move_robot(puzzle_data):
                 'R,12,L,10,L,6,R,10',
                 'n',
                 '', ]
+    output = None
     for command in commands:
         parsed_string = ''
-        output = next(droid)
+        output = output if output else next(droid)
         while output:
             parsed_char = chr(output)
             parsed_string += parsed_char
@@ -208,7 +209,7 @@ def move_robot(puzzle_data):
                 return output
             output = next(droid)
         for char in command + '\n':
-            droid.send(ord(char))
+            output = droid.send(ord(char))
         print(parsed_string, command)
 
 
