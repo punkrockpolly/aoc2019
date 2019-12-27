@@ -124,7 +124,6 @@ def intcode(puzzle_data, n=0, relative_base=0):
 def cryostasis(puzzle_data):
     game = intcode(puzzle_data)
     game.send(None)
-    turn = 0
     commands = ['west',  # Kitchen
                 'take hologram',
                 'north',  # Stables
@@ -145,9 +144,10 @@ def cryostasis(puzzle_data):
                 'east',  # Sick Bay
                 'east',  # Security Checkpoint'
                 'south',
+                '',
                 ]
 
-    while True:
+    for command in commands:
         parsed_string = ''
         output = next(game)
         while output:
@@ -158,12 +158,10 @@ def cryostasis(puzzle_data):
                 return parsed_string
 
         # user_input = input(parsed_string) + '\n'  # for interactive mode
-        user_input = commands[turn] + '\n'  # for auto-play mode
+        user_input = command + '\n'  # for auto-play mode
         print(parsed_string, user_input)
         for char in user_input:
             game.send(ord(char))
-
-        turn += 1
 
 
 print(cryostasis(DAY_25_INPUT))
