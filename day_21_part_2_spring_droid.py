@@ -124,6 +124,7 @@ def intcode(puzzle_data, n=0, relative_base=0):
 def spring_droid(puzzle_data):
     droid = intcode(puzzle_data)
     commands = [
+        # (D && !(A && B && (C || !H)))
         'NOT H T', 'OR C T',
         'AND B T', 'AND A T',
         'NOT T J', 'AND D J',
