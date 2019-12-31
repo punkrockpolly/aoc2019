@@ -1,4 +1,4 @@
-from collections import defaultdict, deque
+from collections import deque
 
 
 DAY_18_INPUT = """#################################################################################
@@ -81,8 +81,7 @@ DAY_18_INPUT = """##############################################################
 #.#...#.#.......#.....#.#.............M.#.#.#...#.#...#.........#...#..h#...#.O.#
 #.#.###.#############.#G###.###########.#.#.#.###.###.#.#########.###.###.#####.#
 #.#...............X...#.....#......q....#.....#.....#...........#.........#.....#
-#################################################################################
-"""  # noqa
+#################################################################################"""  # noqa
 
 TEST_INPUTS = [("""########################
 #...............b.C.D.f#
@@ -109,8 +108,7 @@ TEST_INPUTS = [("""########################
 def parse_input(puzzle_input):
     maze = puzzle_input.splitlines()
     maze_map = {}
-    doors = {}
-    keys = {}
+    keys_and_doors = {}
 
     for y, line in enumerate(maze):
         for x, char in enumerate(line):
@@ -123,40 +121,39 @@ def parse_input(puzzle_input):
                 maze_map[(x, y)] = 'PATH'
             else:
                 maze_map[(x, y)] = char
-                if char.islower():
-                    keys[char] = (x, y)
-                else:
-                    doors[char] = (x, y)
+                keys_and_doors[(x, y)] = char
 
-    return start, maze_map, keys, doors
+    return start, maze_map, keys_and_doors
 
 
-def traverse_maze(puzzle_input, test=False):
-    start, maze_map, keys, doors = parse_input(puzzle_input)
-    directions = {1: (0, 1), 2: (0, -1), 3: (-1, 0), 4: (1, 0)}
-    path = {start: []}
-    q = deque()
-
+def traverse_maze(puzzle_input):
+    start, maze_map, keys_and_doors = parse_input(puzzle_input)
+    directions = {(0, 1), (0, -1), (-1, 0), (1, 0)}
+    path = {(start, ''): []}
+    q = deque([(start, '')])
+    num_keys = sum([k.islower() for k in keys_and_doors.values()])
     while q:
-        x, y = q.popleft()
-        for direction, dir_xy in directions.items():
+        (x, y), prev_keys = q.popleft()
+        for dir_xy in directions:
+            keys = prev_keys
             new_xy = (x + dir_xy[0], y + dir_xy[1])
-            if new_xy in path:
+            tile = maze_map.get(new_xy)
+            if new_xy in keys_and_doors:
+                key_label = keys_and_doors[new_xy]
+                tile = 'PATH'
+                if key_label not in keys:  # have we not seen this item before
+                    if key_label.islower():  # found a key
+                        keys = ''.join(sorted(keys + key_label))  # sort the keys to reduce duplicate paths
+                        if len(keys) == num_keys:
+                            return len(path[((x, y), prev_keys)] + [new_xy])
+                    else:  # found a door
+                        if key_label.lower() not in keys:  # door is locked
+                            continue
+            if (new_xy, keys) in path:  # we've been here before
                 continue
-            if new_xy in portals:
-                portal_label = portals[new_xy]
-                if portal_label == 'ZZ':
-                    return len(path[(x, y)]) - 1
-                portals_xy = portal_map[portal_label]
-                for portal in portals_xy:
-                    if portal != new_xy:
-                        q.append(portal)
-                        path[portal] = path[(x, y)]
-                continue
-            tile = donut_map.get(new_xy)
-            path[new_xy] = path[(x, y)] + [new_xy]
+            path[(new_xy, keys)] = path[((x, y), prev_keys)] + [new_xy]
             if tile == 'PATH':
-                q.append(new_xy)
+                q.append((new_xy, keys))
 
 
 for (test_in, test_out) in TEST_INPUTS:
