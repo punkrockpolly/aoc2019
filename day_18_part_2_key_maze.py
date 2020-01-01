@@ -181,22 +181,17 @@ def find_quadrant_items(quadrant, start, maze_map, keys_and_doors):
 
 def traverse_maze(puzzle_input):
     start, maze_map, keys_and_doors = parse_input(puzzle_input)
-    num_keys = {}
     paths = {}
-    quadrant_keys_and_doors = {1: {}, 2: {}, 3: {}, 4: {}}
 
     for quadrant in range(1, 5):
         items = find_quadrant_items(quadrant, start[quadrant], maze_map, keys_and_doors)
-        quadrant_keys_and_doors[quadrant] = items
-
-    for quadrant in range(1, 5):
-        num_keys[quadrant] = sum([k.islower() for k in quadrant_keys_and_doors[quadrant].values()])
+        num_keys = sum([k.islower() for k in items.values()])
         q = deque([(start[quadrant], '')])
         paths[quadrant] = explore_quadrant(q,
                                            start[quadrant],
                                            maze_map,
-                                           quadrant_keys_and_doors[quadrant],
-                                           num_keys[quadrant])
+                                           items,
+                                           num_keys)
     return sum(path for path in paths.values())
 
 
