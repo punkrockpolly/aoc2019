@@ -163,6 +163,8 @@ def find_quadrant_items(quadrant, start, maze_map, keys_and_doors):
         for dir_xy in directions:
             keys = prev_keys
             new_xy = (x + dir_xy[0], y + dir_xy[1])
+            if (new_xy, keys) in path:  # we've been here before
+                continue
             tile = maze_map.get(new_xy)
             if new_xy in keys_and_doors:
                 key_label = keys_and_doors[new_xy]
@@ -170,8 +172,6 @@ def find_quadrant_items(quadrant, start, maze_map, keys_and_doors):
                 tile = 'PATH'
                 if key_label not in keys:
                     keys = ''.join(sorted(keys + key_label))
-            if (new_xy, keys) in path:  # we've been here before
-                continue
             path[(new_xy, keys)] = path[((x, y), prev_keys)] + [new_xy]
             if tile == 'PATH':
                 q.append((new_xy, keys))
@@ -209,6 +209,8 @@ def explore_quadrant(q, start, maze_map, keys_and_doors, num_keys):
             keys = prev_keys
             new_xy = (x + dir_xy[0], y + dir_xy[1])
             tile = maze_map.get(new_xy)
+            if (new_xy, keys) in path:  # we've been here before
+                continue
             if new_xy in keys_and_doors:
                 key_label = keys_and_doors[new_xy]
                 tile = 'PATH'
@@ -221,8 +223,6 @@ def explore_quadrant(q, start, maze_map, keys_and_doors, num_keys):
                         if key_label.lower() in keys_and_doors and (  # key in this quadrant
                                 key_label.lower() not in keys):  # door is locked
                                 continue
-            if (new_xy, keys) in path:  # we've been here before
-                continue
             path[(new_xy, keys)] = path[((x, y), prev_keys)] + [new_xy]
             if tile == 'PATH':
                 q.append((new_xy, keys))
